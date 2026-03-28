@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Ocean Depths — Frontend Odyssey</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Cinzel:wght@400;700&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ══ CUSTOM CURSOR ══ -->
+  <div id="cursor-dot"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- ══ LOADER ══ -->
+  <div id="loader">
+    <div class="loader-inner">
+      <div class="sonar-ring ring-1"></div>
+      <div class="sonar-ring ring-2"></div>
+      <div class="sonar-ring ring-3"></div>
+      <div class="loader-depth">
+        <span id="loader-count">0</span>
+        <span class="loader-unit">m</span>
+      </div>
+      <p class="loader-label">INITIALISING DIVE SEQUENCE</p>
+    </div>
+  </div>
+
+  <!-- ══ FIXED HUD LAYER — always on top ══ -->
+  <!-- Sound toggle -->
+  <button id="sound-toggle" onclick="toggleMute()"
+    style="
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 200;
+      background: transparent;
+      border: 1px solid rgba(125,249,255,0.25);
+      color: rgba(125,249,255,0.7);
+      font-size: 1rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    ">🔊</button>
+
+  <!-- ══ DEPTH METER (HUD style) ══ -->
+  <div id="depth-meter">
+    <span class="depth-label">DEPTH</span>
+    <span id="depth-number">0</span>
+    <span class="depth-unit">m</span>
+  </div>
+
+  <!-- ══ ZONE INDICATOR ══ -->
+  <div id="zone-indicator">
+    <span id="zone-name">SURFACE</span>
+  </div>
+
+  <!-- ════════════════════════════════
+       SECTION 1 — SURFACE
+  ════════════════════════════════ -->
+  <section class="surface" data-zone="SURFACE">
+
+    <div class="surface-content">
+      <p class="surface-tagline" data-reveal>AN INTERACTIVE JOURNEY</p>
+      <h1 class="surface-title" data-reveal>Ocean<br>Depths</h1>
+      <p class="surface-sub" data-reveal>Scroll to dive 11,000 meters below the surface</p>
+      <button class="dive-btn" data-reveal>DIVE ↓</button>
+    </div>
+
+    <!-- Floating particles -->
+    <div class="particle" style="left:10%; animation-delay:0s"></div>
+    <div class="particle" style="left:25%; animation-delay:1.2s"></div>
+    <div class="particle" style="left:50%; animation-delay:0.5s"></div>
+    <div class="particle" style="left:70%; animation-delay:2s"></div>
+    <div class="particle" style="left:85%; animation-delay:0.8s"></div>
+    <div class="particle" style="left:35%; animation-delay:3s"></div>
+    <div class="particle" style="left:60%; animation-delay:1.8s"></div>
+
+    <!-- Sun rays -->
+    <div class="sun-rays">
+      <div class="ray"></div>
+      <div class="ray"></div>
+      <div class="ray"></div>
+      <div class="ray"></div>
+      <div class="ray"></div>
+    </div>
+
+    <!-- Animated SVG Jellyfish — Surface Zone -->
+    <div class="jelly-float jelly-surface-1">
+      <svg viewBox="0 0 80 120" class="jelly-svg">
+        <ellipse cx="40" cy="35" rx="28" ry="22" class="jelly-bell"/>
+        <ellipse cx="40" cy="28" rx="18" ry="12" class="jelly-inner"/>
+        <line x1="25" y1="55" x2="18" y2="90" class="tentacle t1"/>
+        <line x1="31" y1="57" x2="26" y2="95" class="tentacle t2"/>
+        <line x1="37" y1="58" x2="34" y2="100" class="tentacle t3"/>
+        <line x1="43" y1="58" x2="46" y2="100" class="tentacle t4"/>
+        <line x1="49" y1="57" x2="54" y2="95" class="tentacle t5"/>
+        <line x1="55" y1="55" x2="62" y2="90" class="tentacle t6"/>
+      </svg>
+    </div>
+
+    <div class="jelly-float jelly-surface-2">
+      <svg viewBox="0 0 60 90" class="jelly-svg jelly-small">
+        <ellipse cx="30" cy="25" rx="20" ry="16" class="jelly-bell"/>
+        <ellipse cx="30" cy="20" rx="12" ry="8" class="jelly-inner"/>
+        <line x1="18" y1="40" x2="12" y2="68" class="tentacle t1"/>
+        <line x1="24" y1="42" x2="20" y2="72" class="tentacle t2"/>
+        <line x1="30" y1="43" x2="30" y2="75" class="tentacle t3"/>
+        <line x1="36" y1="42" x2="40" y2="72" class="tentacle t4"/>
+        <line x1="42" y1="40" x2="48" y2="68" class="tentacle t5"/>
+      </svg>
+    </div>
+
+  </section>
+
+  <!-- ════════════════════════════════
+       SECTION 2 — TWILIGHT
+  ════════════════════════════════ -->
+  <section class="twilight" data-zone="TWILIGHT ZONE">
+
+    <div class="twilight-header">
+      <p class="zone-label" data-reveal>200m — 1,000m</p>
+      <h2 class="zone-title" data-split>The Twilight Zone</h2>
+      <p class="zone-desc" data-reveal>Sunlight fades. Pressure builds. Life adapts.</p>
+    </div>
+
+    <!-- Moon Jelly — Twilight -->
+    <div class="jelly-float jelly-twilight">
+      <svg viewBox="0 0 100 150" class="jelly-svg jelly-moon">
+        <ellipse cx="50" cy="40" rx="36" ry="28" class="jelly-bell bell-moon"/>
+        <ellipse cx="50" cy="32" rx="24" ry="16" class="jelly-inner inner-moon"/>
+        <ellipse cx="50" cy="35" rx="10" ry="7" class="jelly-ring"/>
+        <ellipse cx="35" cy="38" rx="8" ry="6" class="jelly-ring"/>
+        <ellipse cx="65" cy="38" rx="8" ry="6" class="jelly-ring"/>
+        <line x1="30" y1="66" x2="20" y2="110" class="tentacle t1 t-moon"/>
+        <line x1="38" y1="68" x2="30" y2="118" class="tentacle t2 t-moon"/>
+        <line x1="46" y1="70" x2="44" y2="122" class="tentacle t3 t-moon"/>
+        <line x1="54" y1="70" x2="56" y2="122" class="tentacle t4 t-moon"/>
+        <line x1="62" y1="68" x2="70" y2="118" class="tentacle t5 t-moon"/>
+        <line x1="70" y1="66" x2="80" y2="110" class="tentacle t6 t-moon"/>
+      </svg>
+    </div>
+
+    <div class="creature-grid">
+
+      <div class="creature-card" data-tilt>
+        <div class="creature-emoji">
+          <svg viewBox="0 0 60 80" class="card-jelly">
+            <ellipse cx="30" cy="22" rx="22" ry="17" class="jelly-bell bell-cyan"/>
+            <ellipse cx="30" cy="17" rx="14" ry="9" class="jelly-inner inner-cyan"/>
+            <line x1="14" y1="38" x2="8"  y2="65" class="tentacle tc1"/>
+            <line x1="21" y1="40" x2="16" y2="68" class="tentacle tc2"/>
+            <line x1="28" y1="41" x2="26" y2="70" class="tentacle tc3"/>
+            <line x1="35" y1="41" x2="38" y2="70" class="tentacle tc4"/>
+            <line x1="42" y1="40" x2="46" y2="68" class="tentacle tc5"/>
+          </svg>
+        </div>
+        <h3>Moon Jelly</h3>
+        <p>No brain. No heart. Survived 5 mass extinctions. Glows faintly in the dark.</p>
+        <span class="depth-tag">200m – 700m</span>
+      </div>
+
+      <div class="creature-card" data-tilt>
+        <div class="creature-emoji">
+          <svg viewBox="0 0 70 90" class="card-jelly">
+            <ellipse cx="35" cy="25" rx="26" ry="20" class="jelly-bell bell-pink"/>
+            <ellipse cx="35" cy="19" rx="16" ry="10" class="jelly-inner inner-pink"/>
+            <line x1="16" y1="44" x2="8"  y2="75" class="tentacle tp1"/>
+            <line x1="23" y1="46" x2="17" y2="78" class="tentacle tp2"/>
+            <line x1="30" y1="47" x2="27" y2="82" class="tentacle tp3"/>
+            <line x1="37" y1="47" x2="40" y2="82" class="tentacle tp4"/>
+            <line x1="44" y1="46" x2="51" y2="78" class="tentacle tp5"/>
+            <line x1="51" y1="44" x2="58" y2="75" class="tentacle tp6"/>
+          </svg>
+        </div>
+        <h3>Mauve Stinger</h3>
+        <p>Electric pink bioluminescence. Its sting can be felt hours after contact.</p>
+        <span class="depth-tag">200m – 1000m</span>
+      </div>
+
+      <div class="creature-card" data-tilt>
+        <div class="creature-emoji">🦑</div>
+        <h3>Giant Squid</h3>
+        <p>Eyes the size of footballs to catch the last photons of light.</p>
+        <span class="depth-tag">300m – 1000m</span>
+      </div>
+
+      <div class="creature-card" data-tilt>
+        <div class="creature-emoji">🐟</div>
+        <h3>Lanternfish</h3>
+        <p>Bioluminescent dots along its body — nature's own fairy lights.</p>
+        <span class="depth-tag">200m – 900m</span>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ════════════════════════════════
+       SECTION 3 — MIDNIGHT
+  ════════════════════════════════ -->
+  <section class="midnight" data-zone="MIDNIGHT ZONE">
+
+    <canvas id="three-canvas"></canvas>
+
+    <!-- Sperm whale -->
+    <div class="whale-wrapper" id="whaleWrapper">
+      <svg viewBox="0 0 300 120" class="whale-svg" id="whaleSvg">
+        <ellipse cx="155" cy="60" rx="120" ry="38" fill="#0a1628" opacity="0.9"/>
+        <ellipse cx="40" cy="58" rx="45" ry="32" fill="#0d1f3c"/>
+        <rect x="5" y="42" width="35" height="32" rx="8" fill="#0d1f3c"/>
+        <path d="M270 55 Q295 35 290 60 Q295 85 270 65 Z" fill="#0a1628"/>
+        <path d="M180 28 Q195 10 210 28 Z" fill="#0a1628"/>
+        <circle cx="55" cy="52" r="5" fill="#1a3a6b"/>
+        <circle cx="56" cy="51" r="2" fill="#7df9ff" opacity="0.8"/>
+        <ellipse cx="140" cy="75" rx="90" ry="14" fill="#0f2a50" opacity="0.5"/>
+        <line x1="100" y1="40" x2="115" y2="50" stroke="#1a3a6b" stroke-width="1.5" opacity="0.6"/>
+        <line x1="130" y1="35" x2="140" y2="48" stroke="#1a3a6b" stroke-width="1" opacity="0.4"/>
+      </svg>
+    </div>
+
+    <div class="midnight-content">
+      <p class="zone-label" data-reveal>1,000m — 4,000m</p>
+      <h2 class="zone-title" data-split>The Midnight Zone</h2>
+      <p class="zone-desc" data-reveal>No sunlight has ever reached here.<br>Only darkness — and life that makes its own light.</p>
+    </div>
+
+    <!-- Crown Jellyfish — Midnight -->
+    <div class="jelly-float jelly-midnight">
+      <svg viewBox="0 0 120 180" class="jelly-svg jelly-crown">
+        <polygon points="60,5 55,25 65,25" class="crown-spike"/>
+        <polygon points="40,8 38,28 48,26" class="crown-spike"/>
+        <polygon points="80,8 72,26 82,28" class="crown-spike"/>
+        <polygon points="22,18 24,38 33,32" class="crown-spike"/>
+        <polygon points="98,18 87,32 96,38" class="crown-spike"/>
+        <ellipse cx="60" cy="55" rx="44" ry="34" class="jelly-bell bell-crown"/>
+        <ellipse cx="60" cy="46" rx="28" ry="18" class="jelly-inner inner-crown"/>
+        <line x1="30" y1="86" x2="15" y2="150" class="tentacle t-crown"/>
+        <line x1="40" y1="89" x2="28" y2="158" class="tentacle t-crown"/>
+        <line x1="50" y1="91" x2="42" y2="165" class="tentacle t-crown"/>
+        <line x1="60" y1="92" x2="60" y2="170" class="tentacle t-crown"/>
+        <line x1="70" y1="91" x2="78" y2="165" class="tentacle t-crown"/>
+        <line x1="80" y1="89" x2="92" y2="158" class="tentacle t-crown"/>
+        <line x1="90" y1="86" x2="105" y2="150" class="tentacle t-crown"/>
+      </svg>
+    </div>
+
+    <div class="angler-fish">
+      <div class="lure"></div>
+      <div class="angler-body">🐠</div>
+    </div>
+
+    <div class="bio-toggle-wrap">
+      <button class="bio-toggle" id="bioToggle">✦ Toggle Bioluminescence</button>
+    </div>
+
+  </section>
+
+  <!-- ════════════════════════════════
+       SECTION 4 — ABYSS
+  ════════════════════════════════ -->
+  <section class="abyss" data-zone="ABYSSAL PLAIN">
+
+    <div class="abyss-content">
+      <p class="zone-label" data-reveal>4,000m — 6,000m</p>
+      <h2 class="zone-title" data-split>The Abyssal Plain</h2>
+      <p class="zone-desc" data-reveal>Crushing pressure. Freezing darkness. Yet life persists.</p>
+
+      <div class="pressure-display">
+        <span id="pressure-count">0</span>
+        <span class="pressure-unit">atmospheres of pressure</span>
+      </div>
+    </div>
+
+    <!-- Big Red Jelly — Abyss -->
+    <div class="jelly-float jelly-abyss">
+      <svg viewBox="0 0 140 200" class="jelly-svg jelly-bigred">
+        <ellipse cx="70" cy="55" rx="52" ry="40" class="jelly-bell bell-red"/>
+        <ellipse cx="70" cy="44" rx="34" ry="22" class="jelly-inner inner-red"/>
+        <path d="M38 92 Q20 130 25 165" class="oral-arm"/>
+        <path d="M50 96 Q38 138 40 175" class="oral-arm"/>
+        <path d="M62 98 Q56 142 58 180" class="oral-arm"/>
+        <path d="M78 98 Q84 142 82 180" class="oral-arm"/>
+        <path d="M90 96 Q102 138 100 175" class="oral-arm"/>
+        <path d="M102 92 Q120 130 115 165" class="oral-arm"/>
+      </svg>
+    </div>
+
+    <div class="cards-scroll-wrapper">
+      <div class="cards-track">
+
+        <div class="flip-card">
+          <div class="flip-inner">
+            <div class="flip-front">
+              <span class="card-icon">🌡️</span>
+              <h3>Temperature</h3>
+              <p class="card-hint">tap to reveal</p>
+            </div>
+            <div class="flip-back">
+              <h3>2°C</h3>
+              <p>Near freezing. Yet entire ecosystems thrive in these conditions.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-card">
+          <div class="flip-inner">
+            <div class="flip-front">
+              <span class="card-icon">⚖️</span>
+              <h3>Pressure</h3>
+              <p class="card-hint">tap to reveal</p>
+            </div>
+            <div class="flip-back">
+              <h3>400 ATM</h3>
+              <p>400x the pressure at sea level. Enough to crush a submarine.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-card">
+          <div class="flip-inner">
+            <div class="flip-front">
+              <span class="card-icon">🦠</span>
+              <h3>Life</h3>
+              <p class="card-hint">tap to reveal</p>
+            </div>
+            <div class="flip-back">
+              <h3>Extremophiles</h3>
+              <p>Bacteria that eat chemicals instead of sunlight. Life finds a way.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-card">
+          <div class="flip-inner">
+            <div class="flip-front">
+              <span class="card-icon">🌋</span>
+              <h3>Hydrothermal Vents</h3>
+              <p class="card-hint">tap to reveal</p>
+            </div>
+            <div class="flip-back">
+              <h3>400°C Water</h3>
+              <p>Superheated water that doesn't boil — pressure keeps it liquid.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-card">
+          <div class="flip-inner">
+            <div class="flip-front">
+              <span class="card-icon">🕳️</span>
+              <h3>Exploration</h3>
+              <p class="card-hint">tap to reveal</p>
+            </div>
+            <div class="flip-back">
+              <h3>5% Explored</h3>
+              <p>We know more about the Moon's surface than our own ocean floor.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="vent-container">
+      <div class="vent-base"></div>
+      <div class="vent-smoke">
+        <div class="smoke-particle"></div>
+        <div class="smoke-particle"></div>
+        <div class="smoke-particle"></div>
+        <div class="smoke-particle"></div>
+        <div class="smoke-particle"></div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ════════════════════════════════
+       SECTION 5 — HADAL
+  ════════════════════════════════ -->
+  <section class="hadal" data-zone="HADAL ZONE">
+
+    <div class="crack-container">
+      <div class="crack crack-1"></div>
+      <div class="crack crack-2"></div>
+      <div class="crack crack-3"></div>
+    </div>
+
+    <!-- Comb Jelly — Hadal -->
+    <div class="jelly-float jelly-hadal">
+      <svg viewBox="0 0 80 140" class="jelly-svg jelly-comb">
+        <ellipse cx="40" cy="55" rx="28" ry="42" class="jelly-bell bell-hadal"/>
+        <line x1="20" y1="25" x2="20" y2="85" class="comb-row cr1"/>
+        <line x1="27" y1="18" x2="27" y2="90" class="comb-row cr2"/>
+        <line x1="34" y1="15" x2="34" y2="93" class="comb-row cr3"/>
+        <line x1="40" y1="14" x2="40" y2="94" class="comb-row cr4"/>
+        <line x1="46" y1="15" x2="46" y2="93" class="comb-row cr5"/>
+        <line x1="53" y1="18" x2="53" y2="90" class="comb-row cr6"/>
+        <line x1="60" y1="25" x2="60" y2="85" class="comb-row cr7"/>
+        <line x1="15" y1="55" x2="5"  y2="130" class="tentacle t-hadal"/>
+        <line x1="65" y1="55" x2="75" y2="130" class="tentacle t-hadal"/>
+      </svg>
+    </div>
+
+    <div class="hadal-content">
+      <p class="zone-label" data-reveal>6,000m — 11,000m</p>
+      <h2 class="zone-title" data-split>The Hadal Zone</h2>
+
+      <div class="typewriter-wrap">
+        <p class="typewriter-text" id="typewriter"></p>
+        <span class="cursor">|</span>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-card" data-tilt>
+          <span class="stat-number">80%</span>
+          <span class="stat-label">of our ocean is unexplored</span>
+        </div>
+        <div class="stat-card" data-tilt>
+          <span class="stat-number">1M+</span>
+          <span class="stat-label">species yet to be discovered</span>
+        </div>
+        <div class="stat-card" data-tilt>
+          <span class="stat-number">8M</span>
+          <span class="stat-label">tons of plastic enter oceans yearly</span>
+        </div>
+        <div class="stat-card" data-tilt>
+          <span class="stat-number">50%</span>
+          <span class="stat-label">of Earth's oxygen comes from the ocean</span>
+        </div>
+      </div>
+
+      <p class="final-message" data-reveal>
+        You have reached the deepest point on Earth.<br>
+        The ocean gave us life. Now it needs ours.
+      </p>
+
+      <button class="surface-btn" id="returnBtn">
+        ↑ Return to Surface
+      </button>
+
+    </div>
+
+  </section>
+
+  <!-- ══ LIBRARIES ══ -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="main.js"></script>
+
+</body>
+</html>
